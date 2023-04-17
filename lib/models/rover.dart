@@ -70,6 +70,33 @@ class Rover {
     'MINITES': 'Miniature Thermal Emission Spectrometer (Mini-TES)',
   });
 
+  static final Map<String, String> camerasColor = Map.from({
+    'EDL_RUCAM': '464531',
+    'EDL_RDCAM': 'EFA94A',
+    'EDL_DDCAM': '6A5F31',
+    'EDL_PUCAM1': 'CDA434',
+    'EDL_PUCAM2': '3E3B32',
+    'NAVCAM_LEFT': '1B5583',
+    'NAVCAM_RIGHT': 'C6A664',
+    'MCZ_RIGHT': '2E3A23',
+    'MCZ_LEFT': 'F75E25',
+    'FRONT_HAZCAM_LEFT_A': '1E2460',
+    'FRONT_HAZCAM_RIGHT_A': '8E402A',
+    'REAR_HAZCAM_LEFT': '4E5754',
+    'REAR_HAZCAM_RIGHT': '75151E',
+    'SKYCAM': '343B29',
+    'SHERLOC_WATSON': 'C93C20',
+    'FHAZ': 'F4F4F4',
+    'RHAZ': 'E4A010',
+    'MAST': '6A5D4D',
+    'CHEMCAM': '642424',
+    'MAHLI': '382C1E',
+    'MARDI': 'CB3234',
+    'NAVCAM': '00BB2D',
+    'PANCAM': '4E3B31',
+    'MINITES': '763C28',
+  });
+
   factory Rover.fromMap(Map<String, dynamic> map) {
     return Rover(
       name: map['name'],

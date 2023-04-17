@@ -19,7 +19,7 @@ class StylesSettings {
   }
 }
 
-const Color ligthPurple = Colors.deepPurple;
+const Color lightPurple = Colors.deepPurple;
 const Color darkPurple = Color.fromARGB(255, 42, 16, 87);
 
 const LinearGradient mainButton = LinearGradient(colors: [

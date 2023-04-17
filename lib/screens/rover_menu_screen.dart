@@ -23,7 +23,6 @@ class RoverMenuScreen extends StatelessWidget {
     } else {
       map1 = {'screen': 'data', 'rover': rover, 'ext': 'png'};
     }
-    Map<String, String> map2 = {'screen': 'image', 'rover': rover};
     Map<String, String> map3 = {'screen': 'gallery', 'rover': rover};
 
     return Stack(
@@ -52,12 +51,6 @@ class RoverMenuScreen extends StatelessWidget {
               text: 'Rover\'s Data',
               color: const Color.fromARGB(255, 44, 51, 109),
               params: map1,
-            ),
-            ImageButton(
-              imagePath: 'assets/images/${rover}_concept.$fileType',
-              text: 'Get Random Image',
-              color: const Color.fromARGB(255, 44, 51, 109),
-              params: map2,
             ),
             ImageButton(
                 imagePath: 'assets/images/${rover}_concept.$fileType',

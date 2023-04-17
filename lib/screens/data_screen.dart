@@ -1,6 +1,7 @@
 import 'package:api_project/provider/rover_data_provider.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class DataScreen extends StatelessWidget {
   DataScreen({super.key});
   RoverDataProvider? roverData;
@@ -91,7 +92,7 @@ class DataScreen extends StatelessWidget {
         ColorFiltered(
           colorFilter: const ColorFilter.mode(
             Color.fromARGB(255, 1, 1, 1),
-            BlendMode.color,
+            BlendMode.dstOut,
           ),
           child: Container(
             decoration: BoxDecoration(
@@ -102,9 +103,10 @@ class DataScreen extends StatelessWidget {
           ),
         ),
         Column(
-          mainAxisSize: MainAxisSize.max,
           children: [
-            Row(
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
                   padding: const EdgeInsets.all(8),
@@ -117,12 +119,19 @@ class DataScreen extends StatelessWidget {
                       image: AssetImage(
                           'assets/images/${data["rover"]}_concept.${data['ext']}')),
                 ),
-                Expanded(
-                    child: Text(
-                  data['rover']!.toUpperCase(),
-                  style: const TextStyle(
-                      fontSize: 40, fontWeight: FontWeight.bold),
-                ))
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                        flex: 4,
+                        child: Text(
+                          data['rover']!.toUpperCase(),
+                          style: const TextStyle(
+                              fontSize: 40, fontWeight: FontWeight.bold),
+                        )),
+                  ],
+                )
               ],
             ),
             Expanded(

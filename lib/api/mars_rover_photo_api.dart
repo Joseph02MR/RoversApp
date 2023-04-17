@@ -19,15 +19,21 @@ class MarsRoverPhotos {
 
   MarsRoverPhotos(String rover, String camera, String? date, String? sol) {
     latestLink = Uri.parse(
-        'https://api.nasa.gov/mars-photos/api/v1/manifests/$rover?API_KEY=$key');
-    roverLink = Uri.parse(
         'https://api.nasa.gov/mars-photos/api/v1/rovers/$rover/latest_photos?API_KEY=$key');
-    if (sol!.isNotEmpty) {
+    roverLink = Uri.parse(
+        'https://api.nasa.gov/mars-photos/api/v1/manifests/$rover?API_KEY=$key');
+    if (sol != '') {
+      if (camera != '') {
+        camera = '&camera=$camera';
+      }
       photosLink = Uri.parse(
-          'https://api.nasa.gov/mars-photos/api/v1/rovers/$rover/photos?sol=$sol&camera=$camera&api_key=$key');
+          'https://api.nasa.gov/mars-photos/api/v1/rovers/$rover/photos?sol=$sol$camera&api_key=$key');
     } else {
+      if (camera != '') {
+        camera = '&camera=$camera';
+      }
       photosLink = Uri.parse(
-          'https://api.nasa.gov/mars-photos/api/v1/rovers/$rover/photos?earth_date=$date&camera=$camera&api_key=$key');
+          'https://api.nasa.gov/mars-photos/api/v1/rovers/$rover/photos?earth_date=$date$camera&api_key=$key');
     }
   }
 
@@ -50,11 +56,21 @@ class MarsRoverPhotos {
     return null;
   }
 
-  Future<List<RoverPhoto>?> getRoverLatest() async {
+  Future<List<RoverPhoto>?> getRoverLatest(String rover) async {
+    var listJson;
     var result = await http.get(latestLink!);
-    var listJson = jsonDecode(result.body)['latest_photos'] as List;
+    if (rover == 'opportunity' || rover == 'spirit') {
+      Rover? rover_aux = await getRover();
+      if (rover_aux != null) {
+        result = await http.get(Uri.parse(
+            'https://api.nasa.gov/mars-photos/api/v1/rovers/$rover/photos?api_key=$key&sol=${rover_aux.maxSol}'));
+        listJson = jsonDecode(result.body)['photos'] as List;
+      }
+    } else {
+      listJson = jsonDecode(result.body)['latest_photos'] as List;
+    }
     if (result.statusCode == 200) {
-      return listJson.map((photos) => RoverPhoto.fromMap(photos)).toList();
+      return listJson.map((photos) => RoverPhoto.fromMap(photos))();
     }
     return null;
   }

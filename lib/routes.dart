@@ -10,7 +10,7 @@ Map<String, WidgetBuilder> getApplicationRoutes() {
     '/main': (BuildContext context) => const SelectRoverScreen(),
     '/rover': (BuildContext context) => const RoverMenuScreen(),
     '/data': (BuildContext context) => DataScreen(),
-    '/image': (BuildContext context) => const ImageScreen(),
+    '/image': (BuildContext context) => ImageScreen(),
     '/gallery': (BuildContext context) => const GalleryScreen(),
   };
 }
