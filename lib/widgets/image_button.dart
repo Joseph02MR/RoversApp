@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:flutter/material.dart';
 
 class ImageButton extends StatelessWidget {
@@ -17,8 +15,24 @@ class ImageButton extends StatelessWidget {
 
   void navigate(context) {
     if (params != null) {
+      if (params!.containsKey('screen')) {
+        var aux = params!['screen'];
+        switch (aux) {
+          case 'data':
+            Navigator.pushNamed(context, '/data', arguments: params);
+            break;
+          case 'image':
+            Navigator.pushNamed(context, '/image', arguments: params!['rover']);
+            break;
+          case 'gallery':
+            Navigator.pushNamed(context, '/gallery', arguments: params);
+            break;
+        }
+        return;
+      }
       if (params!.containsKey('rover')) {
-        Navigator.pushNamed(context, '/rover', arguments: params!['rover']);
+        Navigator.pushNamed(context, '/rover', arguments: params);
+        return;
       }
     }
   }

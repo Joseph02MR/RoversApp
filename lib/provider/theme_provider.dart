@@ -9,9 +9,9 @@ class ThemeProvider with ChangeNotifier {
     _themeData = StylesSettings.darkTheme(context);
   }
 
-  getThemeData() => this._themeData;
+  getThemeData() => _themeData;
   setThemeData(ThemeData theme) {
-    this._themeData = theme;
+    _themeData = theme;
     notifyListeners();
   }
 }

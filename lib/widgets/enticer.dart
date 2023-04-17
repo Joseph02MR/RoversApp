@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:api_project/settings/styles_settings.dart';
 import 'package:flutter/material.dart';
 
 class EnticerOpenerPage extends StatefulWidget {
@@ -11,6 +10,7 @@ class EnticerOpenerPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _EnticerOpenerPageState createState() => _EnticerOpenerPageState();
 }
 
@@ -20,7 +20,7 @@ class _EnticerOpenerPageState extends State<EnticerOpenerPage> {
     'WELCOME',
     'TO',
     'MARS',
-    'HELLO,\r\nWELCOME\r\nTO\r\MARS'
+    'HELLO,\r\nWELCOME\r\nTO\r\nMARS'
   ];
 
   int index = 1;
