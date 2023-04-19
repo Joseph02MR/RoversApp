@@ -1,7 +1,6 @@
 import 'package:api_project/models/rover_photo.dart';
 import 'package:api_project/widgets/card_detail.dart';
 import 'package:flutter/material.dart';
-import 'package:image_card/image_card.dart';
 
 // ignore: must_be_immutable
 class ImageScreen extends StatelessWidget {
@@ -14,8 +13,7 @@ class ImageScreen extends StatelessWidget {
       roverPhoto = ModalRoute.of(context)!.settings.arguments as RoverPhoto;
     }
     return Scaffold(
-        body: Container(
-            child: CardDetail(
+        body: CardDetail(
       [
         /* Text(
           'Get ready for the trip of a lifetime.',
@@ -27,11 +25,11 @@ class ImageScreen extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
         */
-        Padding(
-          padding: const EdgeInsets.only(left: 30, bottom: 20),
+        const Padding(
+          padding: EdgeInsets.only(left: 30, bottom: 20),
           child: Text(
             'Image Data',
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
         ),
         Padding(
@@ -82,6 +80,6 @@ class ImageScreen extends StatelessWidget {
           ),
         )
       ],
-    )));
+    ));
   }
 }

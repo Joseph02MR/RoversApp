@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:api_project/api/mars_rover_photo_api.dart';
 import 'package:api_project/models/rover.dart';
 import 'package:api_project/models/rover_photo.dart';
@@ -13,7 +15,7 @@ class GalleryScreen extends StatefulWidget {
 }
 
 class _GalleryScreenState extends State<GalleryScreen> {
-  late MarsRoverPhotos api;
+  MarsRoverPhotos? api;
   Rover? rover;
   Map<String, String>? data;
   bool useDate = false;
@@ -22,17 +24,18 @@ class _GalleryScreenState extends State<GalleryScreen> {
   TextEditingController sol = TextEditingController();
   String camera = '';
   int _dummy = 1;
+  bool dummyIncremented = true;
 
   void updateRover() async {
-    rover = await api.getRover();
-    setState(() {});
+    api = api ?? MarsRoverPhotos.latest(data!['rover']!);
+    rover = rover ?? await api!.getRover();
   }
 
-  Future<List<RoverPhoto>?>? _future() {
+  Future<List<RoverPhoto>?>? future() {
     if (_dummy > 0) {
-      return api.photosLink != null
-          ? api.getRoverPhotos()
-          : api.getRoverLatest(data!['rover']!);
+      return api!.photosLink != null
+          ? api!.getRoverPhotos()
+          : api!.getRoverLatest(data!['rover']!);
     }
     return null;
   }
@@ -102,21 +105,30 @@ class _GalleryScreenState extends State<GalleryScreen> {
           .showSnackBar(const SnackBar(content: Text('Sol is missing')));
       return false;
     }
+    print('validated');
     return true;
   }
 
   void setApiData() {
     if (validate()) {
-      setState(() {
-        _dummy++;
-        if (useDate) {
-          api =
-              MarsRoverPhotos(rover!.name, camera.toLowerCase(), date.text, '');
-        } else {
-          api =
-              MarsRoverPhotos(rover!.name, camera.toLowerCase(), '', sol.text);
-        }
-      });
+      _dummy++;
+      dummyIncremented = true;
+      if (useDate) {
+        api = MarsRoverPhotos(
+            rover!.name.toLowerCase(), camera.toLowerCase(), date.text, '');
+        print(api!.photosLink);
+      } else {
+        api = MarsRoverPhotos(
+            rover!.name.toLowerCase(), camera.toLowerCase(), '', sol.text);
+        print(api!.photosLink);
+      }
+    }
+  }
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
     }
   }
 
@@ -124,9 +136,26 @@ class _GalleryScreenState extends State<GalleryScreen> {
   Widget build(BuildContext context) {
     if (ModalRoute.of(context)!.settings.arguments != null) {
       data = ModalRoute.of(context)!.settings.arguments as Map<String, String>;
-      api = MarsRoverPhotos.latest(data!['rover']!);
       updateRover();
     }
+
+    Stream<List<RoverPhoto>?> photos() async* {
+      await Future<void>.delayed(const Duration(seconds: 5));
+      print(dummyIncremented);
+      if (dummyIncremented) {
+        if (api!.photosLink != null) {
+          print('kek photo not null');
+          dummyIncremented = false;
+          yield await api!.getRoverPhotos();
+        } else {
+          print('kek photo null');
+          dummyIncremented = false;
+          yield await api!.getRoverLatest(data!['rover']!);
+        }
+      }
+      return;
+    }
+
     return Scaffold(
       appBar: AppBar(backgroundColor: lightPurple),
       drawer: Drawer(
@@ -230,8 +259,8 @@ class _GalleryScreenState extends State<GalleryScreen> {
           ],
         ),
       ),
-      body: FutureBuilder(
-          future: _future(),
+      body: StreamBuilder(
+          stream: photos(),
           builder: (context, AsyncSnapshot<List<RoverPhoto>?> snapshot) {
             if (snapshot.hasData) {
               return GridView.builder(
@@ -251,7 +280,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                 child: Text('Ocurrio un error'),
               );
             } else {
-              return const CircularProgressIndicator();
+              return const Center(child: CircularProgressIndicator());
             }
           }),
     );

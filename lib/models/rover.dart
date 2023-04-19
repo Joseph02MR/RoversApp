@@ -7,7 +7,7 @@ class Rover {
       required this.maxDate,
       required this.maxSol,
       required this.totalPhotos}) {
-    setCameras(name);
+    cameras = setCameras(name);
   }
 
   String name;
@@ -109,16 +109,18 @@ class Rover {
     );
   }
 
-  void setCameras(name) {
+  List<String> setCameras(name) {
     switch (name) {
-      case 'curiosity':
-        cameras = Rover.curiosityCameras;
-      case 'opportunity':
-        cameras = Rover.opportunityCameras;
-      case 'spirit':
-        cameras = Rover.spiritCameras;
-      case 'perseverance':
-        cameras = Rover.perseveranceCameras;
+      case 'Curiosity':
+        return Rover.curiosityCameras;
+      case 'Opportunity':
+        return Rover.opportunityCameras;
+      case 'Spirit':
+        return Rover.spiritCameras;
+      case 'Perseverance':
+        return Rover.perseveranceCameras;
+      default:
+        return List.empty(growable: false);
     }
   }
 }

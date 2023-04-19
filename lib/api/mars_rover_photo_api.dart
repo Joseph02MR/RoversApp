@@ -8,7 +8,8 @@ class MarsRoverPhotos {
   Uri? photosLink;
   Uri? roverLink;
   Uri? latestLink;
-  String key = 'wIkyDZByfsnLXZWHt3nK3lPGwfXQFfTAMjd2Nnw9';
+  //String key = 'wIkyDZByfsnLXZWHt3nK3lPGwfXQFfTAMjd2Nnw9';
+  String key = 'fUErGORRNUnZAOm1wLDEO3G4mlLTf3v1HF53LBx8';
 
   MarsRoverPhotos.latest(String rover) {
     latestLink = Uri.parse(
@@ -39,6 +40,7 @@ class MarsRoverPhotos {
 
   Future<Rover?> getRover() async {
     var result = await http.get(roverLink!);
+    print('Rover ${result.headers['x-ratelimit-remaining']}');
     var listJson =
         jsonDecode(result.body)['photo_manifest'] as Map<String, dynamic>;
     if (result.statusCode == 200) {
@@ -49,6 +51,7 @@ class MarsRoverPhotos {
 
   Future<List<RoverPhoto>?> getRoverPhotos() async {
     var result = await http.get(photosLink!);
+    print('roverPhotos ${result.headers['x-ratelimit-remaining']}');
     var listJson = jsonDecode(result.body)['photos'] as List;
     if (result.statusCode == 200) {
       return listJson.map((photos) => RoverPhoto.fromMap(photos)).toList();
@@ -57,20 +60,29 @@ class MarsRoverPhotos {
   }
 
   Future<List<RoverPhoto>?> getRoverLatest(String rover) async {
-    var listJson;
     var result = await http.get(latestLink!);
+    print('latest ${result.headers['x-ratelimit-remaining']}');
     if (rover == 'opportunity' || rover == 'spirit') {
-      Rover? rover_aux = await getRover();
-      if (rover_aux != null) {
-        result = await http.get(Uri.parse(
-            'https://api.nasa.gov/mars-photos/api/v1/rovers/$rover/photos?api_key=$key&sol=${rover_aux.maxSol}'));
-        listJson = jsonDecode(result.body)['photos'] as List;
-      }
+      return getRoverMaxSolPhotos(rover);
     } else {
-      listJson = jsonDecode(result.body)['latest_photos'] as List;
+      var listJson = jsonDecode(result.body)['latest_photos'] as List;
+      if (result.statusCode == 200) {
+        return listJson.map((photos) => RoverPhoto.fromMap(photos)).toList();
+      }
     }
-    if (result.statusCode == 200) {
-      return listJson.map((photos) => RoverPhoto.fromMap(photos))();
+    return null;
+  }
+
+  Future<List<RoverPhoto>?> getRoverMaxSolPhotos(String rover) async {
+    Rover? roverAux = await getRover();
+    if (roverAux != null) {
+      var result = await http.get(Uri.parse(
+          'https://api.nasa.gov/mars-photos/api/v1/rovers/$rover/photos?api_key=$key&sol=${roverAux.maxSol}'));
+      print('maxsol ${result.headers['x-ratelimit-remaining']}');
+      var listJson = jsonDecode(result.body)['photos'] as List;
+      if (result.statusCode == 200) {
+        return listJson.map((photos) => RoverPhoto.fromMap(photos)).toList();
+      }
     }
     return null;
   }

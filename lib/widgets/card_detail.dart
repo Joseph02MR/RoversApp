@@ -23,28 +23,27 @@ class CardDetail extends StatelessWidget {
       // color: Colors.blueAccent,
       child: Column(
         children: [
-          if (roverPhoto!.imgSrc != null)
-            Expanded(
-              flex: 2,
-              child: SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Card(
-                    color: lightPurple,
-                    elevation: 10,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Image(
-                        image: NetworkImage(roverPhoto!.imgSrc),
-                        fit: BoxFit.fitHeight,
-                      ),
+          Expanded(
+            flex: 2,
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Card(
+                  color: lightPurple,
+                  elevation: 10,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image(
+                      image: NetworkImage(roverPhoto!.imgSrc),
+                      fit: BoxFit.fitHeight,
                     ),
                   ),
                 ),
               ),
             ),
+          ),
           Expanded(
             flex: 1,
             child: SafeArea(
